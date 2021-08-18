@@ -1,8 +1,6 @@
 package com.spring.demo.domain;
 
 import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.ManyToAny;
-
 import com.spring.demo.domain.enums.RequestState;
 
 import lombok.AllArgsConstructor;
@@ -30,31 +26,29 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "request")
-public class Request {
+@Entity(name = "request_stage")
+public class RequestStage {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(length = 75, nullable = false)
-	private String subject;
-
-	@Column(columnDefinition = "text", nullable = false)
 	private String description;
 
-	@Column(name = "creation_date", nullable = false)
+	@Column(name = "realization_date", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date creationDate;
+	private Date realizationDate;
 
 	@Column(length = 12, nullable = false)
 	@Enumerated(EnumType.STRING)
-	private RequestState state;
+	private RequestState requestState;
+
+	@ManyToOne
+	@JoinColumn(name = "request_id", nullable = false)
+	private Request request;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@OneToMany(mappedBy = "request")
-	private List<RequestStage> states = new ArrayList<RequestStage>();
 }
